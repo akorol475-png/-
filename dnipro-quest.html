@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Дніпропетровщина: подорож від степу до Петриківки</title>
+<style>
+:root{
+  --sun:#f7b733; --sunflower:#f39c12; --leaf:#3e8e41; --river:#1e88b5;
+  --petal:#e0507a; --cream:#fff8ec; --ink:#3a2c1c; --card:#ffffff;
+  --border:#f0d9a8; --accent:#c0392b;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{height:100%}
+body{margin:0;font-family:'Segoe UI',Verdana,sans-serif;background:linear-gradient(180deg,var(--cream),#fdf1da 40%,#fff);color:var(--ink);}
+header{position:sticky;top:0;top:env(safe-area-inset-top,0px);z-index:20;background:linear-gradient(120deg,var(--sunflower),var(--sun));padding:10px 8px calc(10px + env(safe-area-inset-top,0px));box-shadow:0 3px 10px rgba(0,0,0,.15)}
+.title-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;max-width:1100px;margin:0 auto}
+.title-row h1{margin:0;font-size:1.15rem;color:#4a2c00}
+.progress-wrap{flex:1;min-width:160px;max-width:280px;background:rgba(255,255,255,.5);border-radius:20px;height:14px;overflow:hidden;border:1px solid #fff}
+.progress-bar{height:100%;background:var(--leaf);width:0%;transition:width .4s}
+nav{display:flex;flex-wrap:wrap;gap:4px;max-width:1100px;margin:8px auto 0;justify-content:center}
+nav button{border:none;background:rgba(255,255,255,.6);padding:6px 10px;border-radius:14px;font-size:.8rem;cursor:pointer;font-weight:600;color:#5a3400}
+nav button.active{background:var(--card);box-shadow:0 2px 4px rgba(0,0,0,.2)}
+nav button .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#ccc;margin-right:4px}
+nav button.done .dot{background:var(--leaf)}
+main{max-width:900px;margin:0 auto;padding:16px 12px 60px}
+section{display:none;animation:fade .3s}
+section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+h2{color:var(--accent);border-bottom:3px solid var(--sun);display:inline-block;padding-bottom:3px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:14px 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.card h3{margin:0 0 6px;font-size:1rem;color:#7a4a00}
+.hero{text-align:center;padding:24px 10px}
+.hero .emojis{font-size:2.4rem;margin:10px 0}
+.big-btn{background:var(--accent);color:#fff;border:none;padding:14px 26px;border-radius:30px;font-size:1.05rem;font-weight:700;cursor:pointer;box-shadow:0 4px 0 #8e2a1f}
+.big-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #8e2a1f}
+.passport{background:#fff3d6;border:2px dashed #d9a441;border-radius:14px;padding:14px;margin-top:18px}
+.passport h3{margin-top:0;color:#7a4a00}
+.passport label{display:block;font-size:.82rem;margin:8px 0 3px;font-weight:600}
+.passport input,.passport textarea{width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:.85rem}
+.save-msg{font-size:.8rem;color:var(--leaf);font-weight:700;height:1em;margin-top:6px}
+.quiz-q{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px}
+.opt{display:block;width:100%;text-align:left;margin:4px 0;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#fffdf7;cursor:pointer}
+.opt.correct{background:#d8f3d0;border-color:var(--leaf)}
+.opt.wrong{background:#fbd7d7;border-color:var(--accent)}
+.flip{cursor:pointer;background:linear-gradient(135deg,#fff,#fff3d6)}
+.flip .ans{display:none;margin-top:6px;font-size:.85rem}
+.flip.open .ans{display:block}
+.tag{display:inline-block;background:var(--leaf);color:#fff;font-size:.7rem;padding:2px 8px;border-radius:10px;margin-bottom:6px}
+select{padding:6px;border-radius:8px;border:1px solid var(--border)}
+.builder-preview{font-size:2.4rem;text-align:center;margin:10px 0;min-height:50px}
+.mapbox{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.mapbox button{padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer}
+.mapbox button.picked{background:var(--leaf);color:#fff}
+.feedback{font-weight:700;margin-top:8px}
+.checklist label{display:flex;gap:8px;align-items:center;background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 10px;margin:6px 0}
+.result-box{text-align:center;padding:20px;font-size:1.2rem;font-weight:700}
+.sources{font-size:.75rem;color:#7a6a55;margin-top:30px;border-top:1px solid var(--border);padding-top:10px}
+@media(max-width:480px){h2{font-size:1.15rem}}
+</style>
+</head>
+<body>
+<header>
+  <div class="title-row">
+    <h1>🌻 Дніпропетровщина</h1>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
+  <nav id="nav"></nav>
+</header>
+<main id="main"></main>
+
+<script>
+const SECTIONS = [
+ {id:'home', label:'🏠 Головна'},
+ {id:'geo', label:'🗺️ Географія'},
+ {id:'nature', label:'🌿 Природа'},
+ {id:'cities', label:'🏙️ Міста'},
+ {id:'history', label:'📜 Історія'},
+ {id:'petrykivka', label:'🌺 Петриківка'},
+ {id:'culture', label:'🎨 Культура'},
+ {id:'dnipro', label:'🌊 Дніпро'},
+ {id:'post', label:'📮 Пошта'},
+ {id:'facts', label:'⭐ Цікавинки'},
+ {id:'passport', label:'📖 Паспорт'},
+ {id:'quest', label:'🏆 Квест'},
+];
+
+function nav(){
+  const n=document.getElementById('nav');
+  n.innerHTML=SECTIONS.map(s=>`<button data-id="${s.id}" onclick="show('${s.id}')"><span class="dot"></span>${s.label}</button>`).join('');
+}
+function markDone(id){
+  let d=JSON.parse(localStorage.getItem('dp_done')||'{}'); d[id]=true;
+  localStorage.setItem('dp_done',JSON.stringify(d)); updateProgress();
+}
+function updateProgress(){
+  let d=JSON.parse(localStorage.getItem('dp_done')||'{}');
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('done', !!d[b.dataset.id]));
+  const pct=Math.round(100*Object.keys(d).length/SECTIONS.length);
+  document.getElementById('progressBar').style.width=pct+'%';
+}
+function show(id){
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.id===id));
+  document.querySelectorAll('main section').forEach(s=>s.classList.toggle('active',s.id===id));
+  if(id!=='home') markDone(id);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function saveField(key,val,msgId){
+  let p=JSON.parse(localStorage.getItem('dp_passport')||'{}'); p[key]=val;
+  localStorage.setItem('dp_passport',JSON.stringify(p));
+  const m=document.getElementById(msgId); if(m){m.textContent='Збережено ✓'; setTimeout(()=>m.textContent='',1200);}
+}
+function loadField(key){ let p=JSON.parse(localStorage.getItem('dp_passport')||'{}'); return p[key]||''; }
+
+function passportBlock(title, fields, prefix){
+  return `<div class="passport"><h3>📝 Запиши у свій Паспорт: ${title}</h3>
+  ${fields.map((f,i)=>{
+    const key=prefix+'_'+i;
+    const val=loadField(key).replace(/"/g,'&quot;');
+    return `<label>${f}</label><input value="${val}" oninput="saveField('${key}',this.value,'${prefix}msg')">`;
+  }).join('')}
+  <div class="save-msg" id="${prefix}msg"></div></div>`;
+}
+
+// ---------- CONTENT ----------
+const html = {};
+
+html.home = `
+<section id="home" class="active">
+ <div class="hero">
+  <h2 style="border:none">Подорож від степу до Петриківки</h2>
+  <p><em>«Досліджуй. Знаходь. Записуй. Відкривай!»</em></p>
+  <div class="emojis">🌻🗺️🌊✉️🌺</div>
+  <p>Ти — юний дослідник Дніпропетровщини. Пройди всі розділи сайту та заповни свій <b>Паспорт дослідника області</b>.</p>
+  <button class="big-btn" onclick="show('geo')">📖 ПОЧАТИ ДОСЛІДЖЕННЯ</button>
+ </div>
+</section>`;
+
+html.geo = `
+<section id="geo">
+ <h2>🗺️ Де розташована Дніпропетровщина?</h2>
+ <div class="grid">
+  <div class="card"><h3>Розташування</h3>Область лежить у центрально-східній частині України, обабіч середньої течії річки Дніпро.</div>
+  <div class="card"><h3>Обласний центр</h3>Місто Дніпро.</div>
+  <div class="card"><h3>Площа</h3>Дніпропетровщина займає близько 5,3% території України — одна з найбільших областей.</div>
+  <div class="card"><h3>Райони</h3>Після реформи 2020 року область поділена на 7 районів.</div>
+  <div class="card"><h3>Сусіди</h3>Межує з Полтавською, Харківською, Донецькою, Запорізькою, Херсонською та Кіровоградською областями.</div>
+  <div class="card"><h3>Найбільші міста</h3>Дніпро, Кривий Ріг, Кам'янське, Нікополь, Павлоград.</div>
+  <div class="card"><h3>Головна річка</h3>Дніпро — третя за довжиною річка Європи, протікає через усю область.</div>
+ </div>
+ <h3>🎯 Мінігра: обери правильну відповідь</h3>
+ <div class="mapbox" id="geoGame"></div>
+ <div class="feedback" id="geoFeedback"></div>
+ ${passportBlock('Моя область', ['Назва області:', 'Обласний центр:', 'Розташована в ______ частині України', 'Площа (у % території України):', 'Межує з (2–3 сусіди):', 'Найбільші міста:', 'Головна річка:'],'geo')}
+</section>`;
+
+html.nature = `
+<section id="nature">
+ <h2>🌿 Природні скарби Дніпропетровщини</h2>
+ <div class="grid">
+  <div class="card"><h3>Степ</h3>Область лежить у степовій природній зоні — тут переважають рівнини з трав'янистою рослинністю.</div>
+  <div class="card"><h3>Річки</h3>Головна річка — Дніпро, також відомі Самара, Оріль, Інгулець.</div>
+  <div class="card"><h3>Рослини</h3>Ковила, полин, степові тюльпани, а вздовж річок — верби й дуби.</div>
+  <div class="card"><h3>Тварини</h3>Байбак (степовий бабак), заєць-русак, лисиця, у водоймах — короп і сом.</div>
+  <div class="card"><h3>Корисні копалини</h3>Залізна руда (Кривий Ріг — один зі світових центрів видобутку), марганець (Нікопольський басейн).</div>
+  <div class="card"><h3>Природоохоронні території</h3>У області є заказники та заповідні урочища, що оберігають степову природу.</div>
+ </div>
+ <h3>🔎 Відгадай природний об'єкт</h3>
+ <div class="quiz-q">
+  <p><b>Підказка 1:</b> Мене видобувають у Кривому Розі.<br><b>Підказка 2:</b> Я маю червонувато-бурий колір.<br><b>Підказка 3:</b> З мене виплавляють метал.</p>
+  <div id="natureGuess"></div>
+ </div>
+ ${passportBlock('Моя природа', ['Найважливіша річка:', 'Природна зона:', 'Дві рослини:', 'Дві тварини:', 'Корисні копалини:', 'Цікавий природний об’єкт:'],'nature')}
+</section>`;
+
+const CITIES = [
+ {n:"Дніпро", h:"Обласний центр, заснований 1776 р. як Катеринослав.", f:"Велике індустріальне та наукове місто на березі Дніпра, відоме довгою набережною.", clue:"Це обласний центр на березі Дніпра з однією з найдовших набережних в Європі."},
+ {n:"Кривий Ріг", h:"Виникло завдяки видобутку залізної руди.", f:"Одне з найдовших міст світу — витягнуте вздовж родовищ руди майже на 126 км.", clue:"Це місто відоме довгою промисловою історією та видобутком залізної руди."},
+ {n:"Кам'янське", h:"Виросло навколо металургійного заводу.", f:"Місто металургів на березі Дніпродзержинського водосховища.", clue:"Це місто виросло навколо великого металургійного заводу на Дніпрі."},
+ {n:"Нікополь", h:"Назва походить від грецького «місто перемоги».", f:"Центр видобутку марганцевої руди, відомий керамікою.", clue:"У цьому місті видобувають марганцеву руду, а назва означає «місто перемоги»."},
+ {n:"Павлоград", h:"Одне з найстаріших міст Дніпропетровщини.", f:"Важливий залізничний вузол та центр вугільного Західного Донбасу.", clue:"Це місто — залізничний вузол поблизу вугільних шахт."},
+ {n:"Петриківка", h:"Селище, засноване запорозькими козаками у XVIII ст.", f:"Батьківщина знаменитого українського декоративного розпису.", clue:"У цьому селищі народився всесвітньо відомий український розпис квітами."},
+];
+html.cities = `
+<section id="cities">
+ <h2>🏙️ Мандруємо містами</h2>
+ <div class="grid">
+  ${CITIES.map(c=>`<div class="card"><h3>${c.n}</h3><p>${c.h}</p><p><b>Факт:</b> ${c.f}</p></div>`).join('')}
+ </div>
+ <h3>🕵️ Вгадай місто за підказкою</h3>
+ <div id="cityGame"></div>
+ ${passportBlock('3 міста Дніпропетровщини', ['Місто 1 — відоме тим, що…', 'Місто 2 — відоме тим, що…', 'Місто 3 — відоме тим, що…'],'cities')}
+</section>`;
+
+html.history = `
+<section id="history">
+ <h2>📜 Сторінками історії</h2>
+ <div class="grid">
+  <div class="card"><h3>Найдавніші мешканці</h3>На цих землях тисячі років тому жили кочові племена скіфів, збереглися їхні кургани.</div>
+  <div class="card"><h3>Запорозьке козацтво</h3>У XVI–XVIII ст. на дніпровських порогах і островах діяла Запорозька Січ — козацька столиця вольниці.</div>
+  <div class="card"><h3>Заснування міст</h3>У другій половині XVIII ст. на цих землях почали засновувати нові міста, зокрема Катеринослав (нині Дніпро).</div>
+  <div class="card"><h3>Промисловий розвиток</h3>Наприкінці XIX ст. край став одним із головних центрів металургії Російської імперії завдяки залізній руді.</div>
+ </div>
+ <h3>⏳ Часова шкала (розстав по порядку)</h3>
+ <div id="timelineGame"></div>
+ ${passportBlock('Історія мого краю', ['Найдавніші мешканці:', 'Козацька історія:', 'Важлива історична подія:', 'Історичне місце:', 'Що мене здивувало:'],'hist')}
+</section>`;
+
+const PETR_ELEMENTS = {
+ flowers:['🌻 Соняшник','🌸 Кущик','🌹 Ружа'],
+ leaves:['🌿 Папороть','🍃 Виноградний листок'],
+ berries:['🍓 Калина','🍇 Виноград'],
+ birds:['🐦 Півник','🦚 Птах-пава'],
+};
+html.petrykivka = `
+<section id="petrykivka">
+ <h2>🌺 Петриківське диво</h2>
+ <div class="grid">
+  <div class="card"><h3>Де виник</h3>У селищі Петриківка на Дніпропетровщині, заснованому козаками-запорожцями.</div>
+  <div class="card"><h3>Що це</h3>Яскравий народний декоративний розпис квітами та рослинами, яким прикрашали хати, посуд і меблі.</div>
+  <div class="card"><h3>Чому важливий</h3>З 2013 року петриківський розпис входить до списку нематеріальної культурної спадщини ЮНЕСКО.</div>
+  <div class="card"><h3>Кольори</h3>Насичені: червоний, жовтий, зелений, синій — на світлому тлі.</div>
+  <div class="card"><h3>Що зображують</h3>Найчастіше фантастичні квіти, ягоди, листя та птахів.</div>
+  <div class="card"><h3>Характерні мазки</h3>«Зернятко», «гребінець» і «крапочки» — особливі прийоми пензлика.</div>
+ </div>
+ <div class="grid">
+  <div class="card"><h3>🌺 Квіти</h3>Головний мотив розпису — фантазійні квіти, яких немає в природі.</div>
+  <div class="card"><h3>🌿 Листя</h3>Листочки додають розпису легкості та руху.</div>
+  <div class="card"><h3>🍓 Ягоди</h3>Калина, виноград — символи достатку.</div>
+  <div class="card"><h3>🐦 Птахи</h3>Півники й пави символізують красу і щастя.</div>
+ </div>
+ <h3>🎨 Збери свій орнамент</h3>
+ <select id="pFlower"></select> <select id="pLeaf"></select> <select id="pBerry"></select> <select id="pBird"></select>
+ <div class="builder-preview" id="petrykivkaPreview"></div>
+ ${passportBlock('Петриківський розпис', ['Де виник:', 'Що це:', 'Основні елементи:', 'Що зображують:', 'Характерні кольори:', 'Один цікавий факт:', 'Мій улюблений елемент:'],'petr')}
+</section>`;
+
+const PEOPLE = [
+ {n:'Тетяна Пата', d:'майстриня розпису', f:'Одна з найвідоміших народних майстринь петриківського розпису XX ст.'},
+ {n:'Дмитро Яворницький', d:'історик, дослідник козацтва', f:'Багато років керував історичним музеєм у Катеринославі (нині Дніпро), збирав козацькі старожитності.'},
+ {n:'Олена Пчілка', d:'письменниця, просвітителька', f:'Мати Лесі Українки, пов’язана з культурним життям краю.'},
+ {n:'Гнат Хоткевич', d:'митець, бандурист', f:'Діяч української культури, пов’язаний з козацькою традицією Придніпров’я.'},
+];
+html.culture = `
+<section id="culture">
+ <h2>🎨 Дніпропетровщина творча</h2>
+ <div class="card"><h3>Мистецькі скарби краю</h3>Петриківський розпис, козацькі пісні та думи, народні ремесла, музеї та театри роблять область відомою в усій Україні.</div>
+ <h3>⭐ Відомі люди Дніпропетровщини</h3>
+ <div class="grid">
+  ${PEOPLE.map(p=>`<div class="card"><span class="tag">${p.d}</span><h3>${p.n}</h3><p>${p.f}</p></div>`).join('')}
+ </div>
+ ${passportBlock('Культурна візитівка', ['Мистецький символ області:', 'Відомий митець/діяч:', 'Відомий культурний об’єкт:', 'Традиція:', 'Що я хотів(-ла) б побачити:'],'cult')}
+</section>`;
+
+html.dnipro = `
+<section id="dnipro">
+ <h2>🌊 Річка, яка об'єднує</h2>
+ <div class="grid">
+  <div class="card"><h3>Що це за річка</h3>Дніпро — одна з найбільших річок Європи, головна водна артерія України.</div>
+  <div class="card"><h3>Значення для України</h3>Ділить країну на Правобережну та Лівобережну частини, дає воду, енергію та шляхи сполучення.</div>
+  <div class="card"><h3>Значення для області</h3>Дніпро протікає через усю Дніпропетровщину, на ньому стоїть обласний центр — місто Дніпро.</div>
+  <div class="card"><h3>Як люди використовують</h3>Судноплавство, риболовля, водопостачання, вироблення електроенергії на ГЕС.</div>
+  <div class="card"><h3>Бережімо річку</h3>Важливо не смітити у воду й берегти прибережні рослини та тварин.</div>
+ </div>
+ <h3>✅ Правда чи вигадка?</h3>
+ <div id="dniproGame"></div>
+ ${passportBlock('Моя річка', ['Назва:', 'Значення для області:', 'Що мене здивувало:', 'Як ми можемо її берегти:'],'dnip')}
+</section>`;
+
+html.post = `
+<section id="post">
+ <h2>📮 Подорож листа</h2>
+ <div class="grid">
+  <div class="card"><h3>Що таке пошта</h3>Служба, яка допомагає людям надсилати одне одному листи, листівки та посилки.</div>
+  <div class="card"><h3>Раніше</h3>Повідомлення передавали гінці, вершники та поштові станції — це було довго і складно.</div>
+  <div class="card"><h3>Конверт і марка</h3>Лист кладуть у конверт, а марка показує, що доставку оплачено.</div>
+  <div class="card"><h3>Навіщо марка</h3>Марка — це маленька «квитанція» про оплату пересилки листа.</div>
+ </div>
+ <h3>📮 Поштова марка як маленька розповідь</h3>
+ <div class="card">На марках зображують людей, тварин, природу, архітектуру й важливі події — так марка розповідає коротку історію про країну чи регіон. Наприклад, марки можуть бути присвячені петриківському розпису чи видатним українцям.</div>
+ <h3>✉️ Збери правильний маршрут листа</h3>
+ <div id="postGame"></div>
+ <div class="feedback" id="postFeedback"></div>
+ ${passportBlock('Пошта', ['Що таке марка?', 'Що має бути на конверті?', 'Як мандрує лист?', 'Яку марку я створив(-ла) б для Дніпропетровщини?'],'post')}
+</section>`;
+
+const FACTS = [
+ 'Дніпро — третя за довжиною річка Європи.',
+ 'Кривий Ріг — одне з найдовших міст світу, витягнуте майже на 126 км.',
+ 'Петриківський розпис визнано спадщиною ЮНЕСКО у 2013 році.',
+ 'Дніпропетровська область займає близько 5,3% території України.',
+ 'Область формує значну частку промислового виробництва країни.',
+ 'Кривий Ріг — центр видобутку залізної руди.',
+ 'Нікопольський басейн — один із найбільших у світі за запасами марганцю.',
+ 'На території області збереглися скіфські кургани.',
+ 'Місто Дніпро було засноване у другій половині XVIII століття.',
+ 'Петриківка — селище, засноване запорозькими козаками.',
+ 'У петриківському розписі митці малюють переважно пальцями та саморобними пензликами.',
+ 'Дніпропетровщина межує одразу з шістьма областями України.',
+ 'На Дніпрі збудовано каскад водосховищ.',
+ 'Степова природна зона вкриває більшу частину області.',
+ 'У регіоні розвинена не лише важка промисловість, а й аграрний сектор.',
+];
+html.facts = `
+<section id="facts">
+ <h2>🤯 А ти знав / знала?</h2>
+ <div class="grid" id="factsGrid"></div>
+ ${passportBlock('Мої 3 найцікавіші факти', ['Факт 1:', 'Факт 2:', 'Факт 3:'],'fac')}
+</section>`;
+
+const CHECK_ITEMS = [
+ 'Я знаю, де розташована область',
+ 'Я знаю її обласний центр',
+ 'Я знаю головні річки',
+ 'Я знаю кілька міст',
+ 'Я знаю природні особливості',
+ 'Я знаю історію краю',
+ 'Я знаю, що таке петриківський розпис',
+ 'Я знаю його основні елементи',
+ 'Я знаю, як працює пошта',
+ 'Я можу назвати цікаві факти',
+];
+html.passport = `
+<section id="passport">
+ <h2>🧳 Заповнюємо паспорт</h2>
+ <p>Познач усе, що ти вже знаєш:</p>
+ <div class="checklist" id="checklist"></div>
+ <div class="feedback" id="passportDone"></div>
+</section>`;
+
+html.quest = `
+<section id="quest">
+ <h2>🏆 Фінальний квест</h2>
+ <div id="quizArea"></div>
+ <div id="quizResult" class="result-box"></div>
+ <div class="sources">
+  <b>Джерела:</b> Департамент інвестицій та ефективного управління Дніпропетровської облдержадміністрації (dia.dp.gov.ua); Дніпропетровська обласна державна адміністрація (adm.dp.gov.ua); загальновідомі енциклопедичні дані про адміністративно-територіальний устрій України та петриківський розпис (ЮНЕСКО, список нематеріальної культурної спадщини, 2013).
+ </div>
+</section>`;
+
+document.getElementById('main').innerHTML = Object.values(html).join('\\n');
+
+// ---------- INTERACTIVITY ----------
+// geo mini game
+(function(){
+  const opts=['Дніпропетровська область','Львівська область','Одеська область'];
+  const box=document.getElementById('geoGame');
+  box.innerHTML = opts.map(o=>`<button onclick="geoPick(this,'${o}')">${o}</button>`).join('');
+})();
+function geoPick(btn,val){
+  document.getElementById('geoFeedback').textContent = val==='Дніпропетровська область' ? '🎉 Правильно! Це Дніпропетровська область.' : '🤔 Спробуй ще раз!';
+}
+// nature guess
+document.getElementById('natureGuess').innerHTML = ['Залізна руда','Граніт','Вугілля'].map(o=>`<button class="opt" onclick="this.parentElement.nextElementSibling ? null:null; this.parentElement.querySelectorAll('.opt').forEach(b=>b.classList.remove('correct','wrong')); if('${o}'==='Залізна руда'){this.classList.add('correct')}else{this.classList.add('wrong')}">${o}</button>`).join('');
+
+// cities guess
+let cityIdx=0;
+function cityRender(){
+  const c=CITIES[cityIdx];
+  document.getElementById('cityGame').innerHTML = `<div class="quiz-q"><p>${c.clue}</p>
+   ${shuffle([...CITIES]).slice(0,4).map(x=>`<button class="opt" onclick="cityCheck(this,'${x.n}','${c.n}')">${x.n}</button>`).join('')}
+   <div><button onclick="cityIdx=(cityIdx+1)%CITIES_LEN;cityRender()" style="margin-top:8px">Наступне місто ▶</button></div></div>`;
+}
+const CITIES_LEN = CITIES.length;
+function cityCheck(btn,pick,correct){
+  btn.parentElement.querySelectorAll('.opt').forEach(b=>b.classList.remove('correct','wrong'));
+  btn.classList.add(pick===correct?'correct':'wrong');
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+cityRender();
+
+// history timeline
+const EVENTS=[
+ {t:'Скіфські часи (кочові племена, кургани)', o:1},
+ {t:'Запорозька Січ (козацтво на Дніпрі)', o:2},
+ {t:'Заснування Катеринослава (нині Дніпро), 2-а пол. XVIII ст.', o:3},
+ {t:'Розвиток металургії наприкінці XIX ст.', o:4},
+];
+let tlPicked=[];
+function tlRender(){
+  const shuffled = shuffle([...EVENTS]);
+  document.getElementById('timelineGame').innerHTML = `<div class="quiz-q"><p>Натискай події у правильному хронологічному порядку:</p>
+   <div id="tlOptions">${shuffled.map(e=>`<button class="opt" onclick="tlPick(this,${e.o})">${e.t}</button>`).join('')}</div>
+   <div class="feedback" id="tlFeedback"></div></div>`;
+  tlPicked=[];
+}
+function tlPick(btn,order){
+  tlPicked.push(order);
+  btn.disabled=true; btn.style.opacity=.5;
+  const correct = tlPicked.every((v,i)=>v===i+1);
+  const fb=document.getElementById('tlFeedback');
+  if(!correct){ fb.textContent='Не за порядком — спробуй знову! 🔄'; setTimeout(tlRender,900); }
+  else if(tlPicked.length===EVENTS.length){ fb.textContent='🎉 Чудово! Ти правильно розставив(-ла) події!'; }
+  else fb.textContent='Так тримати, продовжуй!';
+}
+tlRender();
+
+// petrykivka builder
+function fillSel(id,arr){ document.getElementById(id).innerHTML = arr.map(v=>`<option>${v}</option>`).join(''); }
+fillSel('pFlower',PETR_ELEMENTS.flowers); fillSel('pLeaf',PETR_ELEMENTS.leaves); fillSel('pBerry',PETR_ELEMENTS.berries); fillSel('pBird',PETR_ELEMENTS.birds);
+function petrUpdate(){
+  const v=id=>document.getElementById(id).value.split(' ')[0];
+  document.getElementById('petrykivkaPreview').textContent = `${v('pFlower')} ${v('pLeaf')} ${v('pBerry')} ${v('pBird')}`;
+}
+['pFlower','pLeaf','pBerry','pBird'].forEach(id=>document.getElementById(id).addEventListener('change',petrUpdate));
+petrUpdate();
+
+// facts flip cards
+document.getElementById('factsGrid').innerHTML = FACTS.map((f,i)=>
+ `<div class="card flip" onclick="this.classList.toggle('open')"><h3>💡 Факт №${i+1}</h3><div class="ans">${f}</div></div>`
+).join('');
+
+// dnipro true/false
+const TF=[
+ {s:'Дніпро — одна з найбільших річок Європи.', a:true},
+ {s:'Дніпро протікає через територію Дніпропетровської області.', a:true},
+ {s:'На Дніпрі немає жодного водосховища.', a:false},
+];
+document.getElementById('dniproGame').innerHTML = TF.map((q,i)=>`<div class="quiz-q"><p>${q.s}</p>
+ <button class="opt" onclick="tfCheck(this,${q.a},true)">Правда</button>
+ <button class="opt" onclick="tfCheck(this,${q.a},false)">Вигадка</button></div>`).join('');
+function tfCheck(btn,answer,picked){
+  btn.parentElement.querySelectorAll('.opt').forEach(b=>b.classList.remove('correct','wrong'));
+  btn.classList.add(answer===picked?'correct':'wrong');
+}
+
+// post route game
+const ROUTE=['Відправник','Конверт','Марка','Поштове відділення','Сортування','Перевезення','Адресат'];
+let routeBuilt=[];
+function postRender(){
+  routeBuilt=[];
+  const shuffled=shuffle([...ROUTE]);
+  document.getElementById('postGame').innerHTML = shuffled.map(s=>`<button class="opt" onclick="postPick(this,'${s}')">${s}</button>`).join('');
+  document.getElementById('postFeedback').textContent='';
+}
+function postPick(btn,step){
+  const nextIdx = routeBuilt.length;
+  if(step===ROUTE[nextIdx]){
+    routeBuilt.push(step); btn.disabled=true; btn.classList.add('correct');
+    document.getElementById('postFeedback').textContent = routeBuilt.join(' → ');
+    if(routeBuilt.length===ROUTE.length) document.getElementById('postFeedback').textContent += '  🎉 Лист доставлено!';
+  } else {
+    btn.classList.add('wrong'); setTimeout(()=>btn.classList.remove('wrong'),500);
+  }
+}
+postRender();
+
+// passport checklist
+document.getElementById('checklist').innerHTML = CHECK_ITEMS.map((c,i)=>
+ `<label><input type="checkbox" data-i="${i}" onchange="checkSave()"><span>${c}</span></label>`
+).join('');
+function checkSave(){
+  const boxes=[...document.querySelectorAll('#checklist input')];
+  const state = boxes.map(b=>b.checked);
+  localStorage.setItem('dp_check',JSON.stringify(state));
+  if(boxes.every(b=>b.checked)) document.getElementById('passportDone').textContent='🎉 Твій паспорт дослідника майже готовий!';
+  else document.getElementById('passportDone').textContent='';
+}
+(function(){
+  const saved=JSON.parse(localStorage.getItem('dp_check')||'[]');
+  document.querySelectorAll('#checklist input').forEach((b,i)=>b.checked=!!saved[i]);
+  checkSave();
+})();
+
+// FINAL QUIZ
+const QUIZ=[
+ {q:'Де розташована Дніпропетровська область?',o:['У центрально-східній Україні','На заході України','За межами України'],a:0},
+ {q:'Яке місто є обласним центром?',o:['Дніпро','Львів','Одеса'],a:0},
+ {q:'Головна річка області — це…',o:['Дністер','Дніпро','Дунай'],a:1},
+ {q:'Яке місто відоме видобутком залізної руди?',o:['Кривий Ріг','Павлоград','Петриківка'],a:0},
+ {q:'Хто такі запорозькі козаки?',o:['Кочові племена з Азії','Воїни, що жили на дніпровських островах і порогах','Іноземні купці'],a:1},
+ {q:'Що таке петриківський розпис?',o:['Вид спорту','Народний декоративний розпис квітами','Старовинна страва'],a:1},
+ {q:'З якого року петриківський розпис у списку ЮНЕСКО?',o:['2013','1991','2020'],a:0},
+ {q:'Які кольори характерні для петриківського розпису?',o:['Лише чорно-білі','Насичені: червоний, жовтий, зелений, синій','Лише пастельні'],a:1},
+ {q:'Правда чи вигадка: Дніпро протікає через область.',o:['Правда','Вигадка'],a:0},
+ {q:'Що потрібно наклеїти на конверт перед відправленням?',o:['Марку','Наліпку із зображенням','Нічого не потрібно'],a:0},
+ {q:'Яка перша зупинка листа після відправника?',o:['Адресат','Конверт','Сортування'],a:1},
+ {q:'Яка природна зона переважає в області?',o:['Тайга','Степ','Пустеля'],a:1},
+ {q:'Яку корисну копалину видобувають у Нікопольському басейні?',o:['Марганець','Нафту','Золото'],a:0},
+ {q:'Скільки районів у Дніпропетровській області після реформи 2020 р.?',o:['3','7','15'],a:1},
+ {q:'Петриківка — це…',o:['Селище, батьківщина розпису','Назва річки','Назва гори'],a:0},
+];
+let qIdx=0, qScore=0;
+function quizRender(){
+  if(qIdx>=QUIZ.length){ quizFinish(); return; }
+  const item=QUIZ[qIdx];
+  document.getElementById('quizArea').innerHTML = `<div class="quiz-q"><p><b>Питання ${qIdx+1} з ${QUIZ.length}:</b> ${item.q}</p>
+   ${item.o.map((o,i)=>`<button class="opt" onclick="quizAnswer(${i})">${o}</button>`).join('')}</div>`;
+  document.getElementById('quizResult').textContent='';
+}
+function quizAnswer(i){
+  const item=QUIZ[qIdx];
+  const btns=[...document.querySelectorAll('#quizArea .opt')];
+  btns.forEach((b,idx)=>{ if(idx===item.a) b.classList.add('correct'); else if(idx===i) b.classList.add('wrong'); b.disabled=true;});
+  if(i===item.a) qScore++;
+  setTimeout(()=>{ qIdx++; quizRender(); },800);
+}
+function quizFinish(){
+  document.getElementById('quizArea').innerHTML='';
+  let msg='🌱 Ти дослідник-початківець!';
+  if(qScore>=13) msg='🏆 Ти справжній знавець краю!';
+  else if(qScore>=8) msg='🌻 Ти чудово знаєш Дніпропетровщину!';
+  document.getElementById('quizResult').innerHTML = `Правильних відповідей: ${qScore} з ${QUIZ.length}<br>${msg}
+   <br><button class="big-btn" style="margin-top:10px" onclick="qIdx=0;qScore=0;quizRender()">Спробувати ще раз</button>`;
+  markDone('quest');
+}
+
+nav(); show('home'); updateProgress(); quizRender();
+</script>
+</body>
+</html>
